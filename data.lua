@@ -66,3 +66,25 @@ end
 function log_table(table)
   log(helper.dump(table))
 end
+
+helper["extend"] = nil
+
+local function execute_extender(extend, t)
+  if (type(extend) == "table") then
+    for _, _extend in pairs(extend) do
+      execute_extender(_extend)
+    end
+  elseif (type(extend) == "function") then
+    extend(t)
+  elseif (type(extend) == "string") then
+    log(extend)
+  end
+end
+
+local old_extend = data.extend
+data.extend = function(self, t)
+  if (helper.extend) then
+    execute_extender(helper.extend, t)
+  end
+  old_extend(self, t)
+end
