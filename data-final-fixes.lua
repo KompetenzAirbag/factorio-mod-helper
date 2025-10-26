@@ -42,4 +42,6 @@ local function remove_recipes_from_handcrafting()
   end
 end
 
-remove_recipes_from_handcrafting()
+if settings.startup["hp-only-show-handcraftables"].value then
+  remove_recipes_from_handcrafting()
+end
