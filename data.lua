@@ -88,3 +88,37 @@ data.extend = function(self, t)
   end
   old_extend(self, t)
 end
+
+---iterates all mods and specifically searches for mod names
+---@param mod_name string this can be part of a name (e.g. "angels" for all angels mods)
+---@param mod_prefix string this can also be part of a prefix
+local function prefix_check_all_mods(mod_name, mod_prefix)
+  local internal_mod_name = ""
+  new_name = false
+
+  helper.extend = function(arg)
+    local info = debug.getinfo(4, "S").source
+    info = info:match("@__([%w%-%_]+)__")
+    if not string.find(info, mod_name) then
+      return
+    end
+
+    if internal_mod_name ~= info then
+      internal_mod_name = info
+      new_name = true
+    end
+
+    for _,ext in pairs(arg) do
+      if not string.find(ext.name, mod_prefix) then
+        if new_name then
+          print(internal_mod_name)
+          new_name = false
+        end
+
+        print("name: "..ext.name.." | type: "..ext.type)
+      end
+    end
+  end
+end
+
+prefix_check_all_mods("angels", "angels-")
