@@ -67,6 +67,10 @@ function log_table(table)
   log(helper.dump(table))
 end
 
+---This can be a function, a string (will get printed) or a table
+---A string will get printed
+---A function will get executed and takes in the arguments passed to data:extend
+---A table will get iterated and every string printed and functions executed
 helper["extend"] = nil
 
 local function execute_extender(extend, t)
@@ -81,6 +85,11 @@ local function execute_extender(extend, t)
   end
 end
 
+---Usage:
+---Go to the top of the data.lua file of the mod you want to extend
+---Add: helper.extend = function(args) ...YOUR FUNCTION... end
+---Anything done to data will go through your extended function (see above)
+---At the end of the data.lua file add helper.extend = nil to stop
 local old_extend = data.extend
 data.extend = function(self, t)
   if (helper.extend) then
@@ -89,7 +98,8 @@ data.extend = function(self, t)
   old_extend(self, t)
 end
 
----iterates all mods and specifically searches for mod names
+---Iterates all mods and specifically searches for mod names
+---Putting this here will include all stages (data, data-updates, data-final-fixes)
 ---@param mod_name string this can be part of a name (e.g. "angels" for all angels mods)
 ---@param mod_prefix string this can also be part of a prefix
 local function prefix_check_all_mods(mod_name, mod_prefix)
