@@ -108,7 +108,13 @@ local function prefix_check_all_mods(mod_name, mod_prefix)
 
   helper.extend = function(arg)
     local info = debug.getinfo(4, "S").source
+
     info = info:match("@__([%w%-%_]+)__")
+
+    if not info then
+      return
+    end
+
     if not string.find(info, mod_name) then
       return
     end
