@@ -2,9 +2,9 @@ local function remove_recipes_from_handcrafting()
   player_categories = {}
 
   for _, v in pairs(data.raw.character) do
-    v.crafting_categories = v.crafting_categories or {}
-    
-    player_categories = v.crafting_categories
+    for _, category in pairs(v.crafting_categories or {}) do
+      table.insert(player_categories, category)
+    end
   end
 
   local function find_in_array(name)
